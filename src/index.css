@@ -360,11 +360,6 @@ body {
   color: var(--text);
 }
 
-.cart__discount span:last-child {
-  color: var(--accent);
-  font-weight: 600;
-}
-
 .cart__empty {
   color: var(--muted);
   font-size: 13px;

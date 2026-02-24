@@ -81,18 +81,13 @@ function App() {
     [addons]
   );
 
-  const allSelected = hasSeats && activeModules.every((m) => m.active);
-
-  const subtotal = useMemo(() => {
+  const total = useMemo(() => {
     if (!hasSeats) return 0;
     const addonSum = activeModules
       .filter((m) => m.active)
       .reduce((sum, m) => sum + addonPrices[m.key], 0);
     return (corePrice + addonSum) * seats;
   }, [activeModules, seats, hasSeats]);
-
-  const discount = allSelected ? Math.round(subtotal * 0.1) : 0;
-  const total = subtotal - discount;
 
   const [tooltip, setTooltip] = useState<{ visible: boolean; x: number; y: number }>({
     visible: false,
@@ -202,15 +197,6 @@ function App() {
                   </li>
                 ))}
             </ul>
-            {allSelected && (
-              <>
-                <div className="cart__divider" />
-                <div className="cart__item cart__discount">
-                  <span>Bundle discount (10%)</span>
-                  <span>-{formatPrice(discount)}</span>
-                </div>
-              </>
-            )}
             <div className="cart__divider" />
             <div className="cart__total">
               <span>Total</span>
