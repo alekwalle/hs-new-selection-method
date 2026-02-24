@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { Button } from "highsoft-ui";
 import "highsoft-ui/css";
 
@@ -81,13 +81,37 @@ function App() {
     [addons]
   );
 
-  const total = useMemo(() => {
+  const allSelected = hasSeats && activeModules.every((m) => m.active);
+
+  const subtotal = useMemo(() => {
     if (!hasSeats) return 0;
     const addonSum = activeModules
       .filter((m) => m.active)
       .reduce((sum, m) => sum + addonPrices[m.key], 0);
     return (corePrice + addonSum) * seats;
   }, [activeModules, seats, hasSeats]);
+
+  const discount = allSelected ? Math.round(subtotal * 0.1) : 0;
+  const total = subtotal - discount;
+
+  const [tooltip, setTooltip] = useState<{ visible: boolean; x: number; y: number }>({
+    visible: false,
+    x: 0,
+    y: 0,
+  });
+  const tooltipRef = useRef<HTMLDivElement>(null);
+
+  const handleTooltipMove = useCallback(
+    (e: React.MouseEvent) => {
+      if (hasSeats) return;
+      setTooltip({ visible: true, x: e.clientX, y: e.clientY });
+    },
+    [hasSeats]
+  );
+
+  const handleTooltipLeave = useCallback(() => {
+    setTooltip((prev) => ({ ...prev, visible: false }));
+  }, []);
 
   const handleClear = () => {
     setAddons(initialAddons);
@@ -103,7 +127,7 @@ function App() {
               <img src={hasSeats ? coreSelectedIcon : coreIcon} alt="" width={32} height={32} />
             </span>
             <div>
-              <h1 className="card__title">Highcharts Core</h1>
+              <h1 className="card__title">Core</h1>
             </div>
           </div>
           <div className="header__pricing" aria-label="Pricing and seats">
@@ -123,7 +147,7 @@ function App() {
 
         <div className="divider-row" role="presentation">
           <span className="divider" />
-          <span className="divider-label">Additional Modules</span>
+          <span className="divider-label">Additional Modules (requires Core)</span>
           <span className="divider" />
         </div>
 
@@ -141,29 +165,74 @@ function App() {
               <div className="price" data-price>
                 {formatPrice(addonPrices[module.key])}
               </div>
-              <Button
-                variant={module.active ? "transparent" : "success"}
-                size={100}
-                data-action="toggle"
-                onClick={() => handleAddonToggle(module.key)}
-                disabled={!hasSeats}
+              <span
+                onMouseMove={!hasSeats ? handleTooltipMove : undefined}
+                onMouseLeave={!hasSeats ? handleTooltipLeave : undefined}
               >
-                {module.active ? "Remove" : "Add module +"}
-              </Button>
+                <Button
+                  variant={module.active ? "transparent" : "success"}
+                  size={100}
+                  data-action="toggle"
+                  onClick={() => handleAddonToggle(module.key)}
+                  disabled={!hasSeats}
+                >
+                  {module.active ? "Remove" : "Add module +"}
+                </Button>
+              </span>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="total-bar" aria-label="Total">
-        <div className="total-pill">
-          <span className="total-label">Total</span>
-          <span className="total-value">${formatTotal(total)}</span>
-          <button className="total-clear" onClick={handleClear} disabled={total === 0}>
-            Clear
-          </button>
-        </div>
+      <section className="cart" aria-label="Cart">
+        <h2 className="cart__title">Summary</h2>
+        {hasSeats ? (
+          <>
+            <ul className="cart__items">
+              <li className="cart__item">
+                <span>Highcharts Core</span>
+                <span>{formatPrice(corePrice)}</span>
+              </li>
+              {activeModules
+                .filter((m) => m.active)
+                .map((m) => (
+                  <li key={m.key} className="cart__item">
+                    <span>{m.name}</span>
+                    <span>{formatPrice(addonPrices[m.key])}</span>
+                  </li>
+                ))}
+            </ul>
+            {allSelected && (
+              <>
+                <div className="cart__divider" />
+                <div className="cart__item cart__discount">
+                  <span>Bundle discount (10%)</span>
+                  <span>-{formatPrice(discount)}</span>
+                </div>
+              </>
+            )}
+            <div className="cart__divider" />
+            <div className="cart__total">
+              <span>Total</span>
+              <span>${formatTotal(total)}</span>
+            </div>
+            <button className="cart__clear" onClick={handleClear}>
+              Clear selection
+            </button>
+          </>
+        ) : (
+          <p className="cart__empty">No products selected</p>
+        )}
       </section>
+      {tooltip.visible && (
+        <div
+          ref={tooltipRef}
+          className="cursor-tooltip"
+          style={{ left: tooltip.x, top: tooltip.y }}
+        >
+          Select Core first
+        </div>
+      )}
     </main>
   );
 }
