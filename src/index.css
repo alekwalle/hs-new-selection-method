@@ -186,11 +186,21 @@ body {
 
 .divider {
   height: 1px;
-  background: linear-gradient(90deg, rgba(198, 204, 212, 0), rgba(198, 204, 212, 1), rgba(198, 204, 212, 0));
+  background: linear-gradient(
+    90deg,
+    rgba(198, 204, 212, 0),
+    rgba(198, 204, 212, 1),
+    rgba(198, 204, 212, 0)
+  );
 }
 
 .card--selected .divider {
-  background: linear-gradient(90deg, rgba(11, 138, 97, 0), rgba(11, 138, 97, 0.6), rgba(11, 138, 97, 0));
+  background: linear-gradient(
+    90deg,
+    rgba(11, 138, 97, 0),
+    rgba(11, 138, 97, 0.6),
+    rgba(11, 138, 97, 0)
+  );
 }
 
 .modules {
@@ -210,8 +220,8 @@ body {
 }
 
 .module.muted {
-  opacity: 0.75;
-  filter: grayscale(0.2);
+  opacity: 1;
+  filter: none;
 }
 
 .module.disabled {
@@ -230,24 +240,17 @@ body {
 }
 
 .module__icon {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   margin: 0 auto 10px;
-  border-radius: 8px;
-  background: linear-gradient(180deg, #f7f9fb 0%, #eef2f7 100%);
   display: grid;
   place-items: center;
-  border: 1px solid #e2e6ec;
 }
 
-.module__icon svg {
-  width: 20px;
-  height: 20px;
-  fill: none;
-  stroke: #6b7aac;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.module__icon img {
+  width: 32px;
+  height: 32px;
+  display: block;
 }
 
 .module h2 {

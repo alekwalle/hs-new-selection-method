@@ -1,5 +1,14 @@
 import { useMemo, useState } from "react";
 
+import coreIcon from "./svg/core.svg";
+import coreSelectedIcon from "./svg/core-selected.svg";
+import stockIcon from "./svg/stock.svg";
+import stockSelectedIcon from "./svg/stock-selected.svg";
+import mapsIcon from "./svg/maps.svg";
+import mapsSelectedIcon from "./svg/maps-selected.svg";
+import ganttIcon from "./svg/gantt.svg";
+import ganttSelectedIcon from "./svg/gantt-selected.svg";
+
 const corePrice = 185;
 const addonPrices = {
   stock: 185,
@@ -11,34 +20,20 @@ const moduleMeta = [
   {
     key: "stock" as const,
     name: "Stock",
-    icon: (
-      <>
-        <path d="M6 22l6-8 5 6 6-10" />
-        <path d="M22 10h4v4" />
-      </>
-    ),
+    icon: stockIcon,
+    iconSelected: stockSelectedIcon,
   },
   {
     key: "maps" as const,
     name: "Maps",
-    icon: (
-      <>
-        <path d="M6 8l8-3v19l-8 3z" />
-        <path d="M18 6l8 3v15l-8-3z" />
-        <path d="M14 6l4 1.5v19l-4-1.5z" />
-      </>
-    ),
+    icon: mapsIcon,
+    iconSelected: mapsSelectedIcon,
   },
   {
     key: "gantt" as const,
     name: "Gantt",
-    icon: (
-      <>
-        <path d="M6 10h12v4H6z" />
-        <path d="M14 16h12v4H14z" />
-        <path d="M6 22h8v4H6z" />
-      </>
-    ),
+    icon: ganttIcon,
+    iconSelected: ganttSelectedIcon,
   },
 ];
 
@@ -103,15 +98,7 @@ function App() {
         <div className="card__header">
           <div className="card__title-group">
             <span className="avatar" aria-hidden>
-              <svg viewBox="0 0 40 40" role="presentation">
-                <rect x="3" y="3" width="34" height="34" rx="9" fill="#f7f8fb" stroke="#d6d9df" />
-                <circle cx="20" cy="20" r="11" fill="#74e4c4" />
-                <path
-                  d="M20 9c3.2 0 6.6 1.5 8.6 4.2L20 20z"
-                  fill="#6972d8"
-                />
-                <circle cx="20" cy="20" r="2.4" fill="#5a67c8" />
-              </svg>
+              <img src={hasSeats ? coreSelectedIcon : coreIcon} alt="" width={32} height={32} />
             </span>
             <div>
               <h1 className="card__title">Highcharts Core</h1>
@@ -146,9 +133,7 @@ function App() {
               data-key={module.key}
             >
               <div className="module__icon" aria-hidden>
-                <svg viewBox="0 0 32 32" role="presentation">
-                  {module.icon}
-                </svg>
+                <img src={module.active ? module.iconSelected : module.icon} alt="" width={32} height={32} />
               </div>
               <h2>{module.name}</h2>
               <div className="price" data-price>
