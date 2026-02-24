@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import { Button } from "highsoft-ui";
+import "highsoft-ui/css";
 
 import coreIcon from "./svg/core.svg";
 import coreSelectedIcon from "./svg/core-selected.svg";
@@ -107,15 +109,15 @@ function App() {
           <div className="header__pricing" aria-label="Pricing and seats">
             <div className="price-block">
               <div className="price price--main">{`${corePrice} USD`}</div>
-              <div className="price-sub">per seat</div>
             </div>
-            <button
-              className="btn seat-add"
+            <Button
+              variant={hasSeats ? "transparent" : "success"}
+              size={200}
               onClick={handleSeatToggle}
               aria-label={hasSeats ? "Remove seat" : "Add seat"}
             >
-              {hasSeats ? "Remove" : "Add"}
-            </button>
+              {hasSeats ? "Remove" : "Add Core"}
+            </Button>
           </div>
         </div>
 
@@ -139,14 +141,15 @@ function App() {
               <div className="price" data-price>
                 {formatPrice(addonPrices[module.key])}
               </div>
-              <button
-                className={`btn${module.active ? " btn--remove" : ""}`}
+              <Button
+                variant={module.active ? "transparent" : "success"}
+                size={100}
                 data-action="toggle"
                 onClick={() => handleAddonToggle(module.key)}
                 disabled={!hasSeats}
               >
                 {module.active ? "Remove" : "Add module +"}
-              </button>
+              </Button>
             </article>
           ))}
         </div>
