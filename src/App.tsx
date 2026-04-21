@@ -158,7 +158,7 @@ function App() {
               </div>
               <h2>{module.name}</h2>
               <div className="price" data-price>
-                {formatPrice(addonPrices[module.key])}
+                {`+${formatPrice(addonPrices[module.key])}`}
               </div>
               <span
                 onMouseMove={!hasSeats ? handleTooltipMove : undefined}
@@ -171,16 +171,17 @@ function App() {
                   onClick={() => handleAddonToggle(module.key)}
                   disabled={!hasSeats}
                 >
-                  {module.active ? "Remove" : "Add module +"}
+                  {module.active ? "Remove" : "Add module"}
                 </Button>
               </span>
             </article>
           ))}
         </div>
+
       </section>
 
       <section className="cart" aria-label="Cart">
-        <h2 className="cart__title">Summary</h2>
+        <h2 className="cart__title">Cart</h2>
         {hasSeats ? (
           <>
             <ul className="cart__items">

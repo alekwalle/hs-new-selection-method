@@ -266,6 +266,7 @@ body {
   margin-top: 0;
 }
 
+
 .cursor-tooltip {
   position: fixed;
   transform: translate(-50%, calc(-100% - 12px));
